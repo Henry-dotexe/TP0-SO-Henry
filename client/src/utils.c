@@ -24,15 +24,18 @@ int crear_conexion(char *ip, char* puerto)
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
+	//hints.ai_flags = AI_PASSIVE; Si esto está el socket no puede ser de conexión, pero si escucha
 
-	getaddrinfo(ip, puerto, &hints, &server_info);
+	getaddrinfo(ip, puerto, &hints, &server_info); //Va la dirección IP porque el cliente tiene que saber a donde conectarse (el server no se va a conectar, solo acepta conexiones)
 
 	// Ahora vamos a crear el socket.
-	int socket_cliente = 0;
+	int socket_cliente = socket(server_info->ai_family,
+								server_info->ai_socktype,
+								server_info->ai_protocol);
 
 	// Ahora que tenemos el socket, vamos a conectarlo
 
+	connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen); //Aqui se intenta conectar a un server que esté en accept
 
 	freeaddrinfo(server_info);
 
@@ -60,7 +63,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 }
 
 
-void crear_buffer(t_paquete* paquete)
+void crear_buffer(t_paquete* paquete) //Crea e inicializa las variables del buffer que trae paquete
 {
 	paquete->buffer = malloc(sizeof(t_buffer));
 	paquete->buffer->size = 0;
@@ -79,10 +82,10 @@ void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 {
 	paquete->buffer->stream = realloc(paquete->buffer->stream, paquete->buffer->size + tamanio + sizeof(int));
 
-	memcpy(paquete->buffer->stream + paquete->buffer->size, &tamanio, sizeof(int));
+	memcpy(paquete->buffer->stream + paquete->buffer->size, &tamanio, sizeof(int)); //Esto agrega el tamaño del nuevo valor justo despues de donde estaba el ultimo valor del stream
 	memcpy(paquete->buffer->stream + paquete->buffer->size + sizeof(int), valor, tamanio);
 
-	paquete->buffer->size += tamanio + sizeof(int);
+	paquete->buffer->size += tamanio + sizeof(int); //Recalcula el tamaño del buffer
 }
 
 void enviar_paquete(t_paquete* paquete, int socket_cliente)
