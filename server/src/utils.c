@@ -1,4 +1,4 @@
-#include"utils.h"
+#include "utils.h"
 
 t_log* logger;
 
@@ -8,12 +8,12 @@ int iniciar_servidor(void)
 
 	struct addrinfo hints, *servinfo, *p; //p?
 
-	memset(&hints, 0, sizeof(hints));
+	memset(&hints, 0, sizeof(hints)); //Setea los valores de hints a 0
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
 
-	getaddrinfo(NULL, "4444", &hints, &servinfo);
+	getaddrinfo(NULL, "4444", &hints, &servinfo); //Syscall para configurar el puntero servinfo con los valores para el socket
 
 	// Creamos el socket de escucha del servidor
 

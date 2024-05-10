@@ -12,6 +12,7 @@ int main(void)
 	t_log* logger;
 	t_config* config;
 
+	system("clear");
 	/* ---------------- LOGGING ---------------- */
 
 	logger = iniciar_logger();
@@ -36,7 +37,8 @@ int main(void)
 
 	printf("Por favor introduzca una opcion [ ]\b\b");
 	scanf("%d",&opc);
-
+	printf("\n");
+	system("clear");
 	while(opc!=5){
 		switch(opc){
 			case 0://Prueba de logger
@@ -68,9 +70,12 @@ int main(void)
 				printf("Cerrando programa...");
 				break;
 		}
+		
 		printf("\n\t~Menu de TP0~\n\n[0] Prueba de Logger\n[1] Obtener valores config\n[2] Leer por consola y loggear\n[3] Handshake (Requiere valores de config)\n[4] Enviar paquete\n[5] Salir\n\n");
 		printf("Por favor introduzca una opcion [ ]\b\b");
 		scanf("%d",&opc);
+		printf("\n");
+		system("clear");
 	}
 
 	/*---------------------------------------------------PARTE 5-------------------------------------------------------------*/
